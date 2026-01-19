@@ -5,8 +5,8 @@ import { searchCities } from '../src/api/geocoding';
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import CityPage from './city/CityPage';
 
-const MainFunction = () => {
-  // Replace this with your code. Good luck!
+const HomePage = () => {
+  // declare all the variables
   const [inputText, setText] = useState('');
   const [dropdown, setDropdown] = useState(false);
   const [inputCity, setInputCity] = useState<City[]>([]);
@@ -14,7 +14,7 @@ const MainFunction = () => {
 
   const handleChange = async(event: React.ChangeEvent<HTMLInputElement>) => {
     const value = event.target.value;
-    // set the text
+    // set the text with the value in the box
     setText(value);
     // check the length of the input and the show the dropdown
     if (value.length > 2) {
@@ -27,6 +27,7 @@ const MainFunction = () => {
     }
   }
 
+  // change the page 
   const changePage = (city : City) => {
     navigate('/CityPage', {state: {city} });
   }
@@ -44,15 +45,4 @@ const MainFunction = () => {
   );
 };
 
-const App = () => {
-  return (
-    <BrowserRouter>
-      <Routes>
-        <Route path="/" element={<MainFunction></MainFunction>}></Route>
-        <Route path="/CityPage" element={<CityPage></CityPage>}></Route>
-      </Routes>
-    </BrowserRouter>
-  )
-}
-
-export default App;
+export default HomePage;
