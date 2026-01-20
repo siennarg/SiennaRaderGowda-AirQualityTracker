@@ -14,6 +14,10 @@ export const fetchPossibleCities = async(name: string) => {
 };
 
 const CityPage = () => {
+    const returnToHome = () => {
+        navigate('/');
+    }
+
     const location = useLocation();
     const navigate = useNavigate();
     const [airQuality, setAirQuality] = useState<AirQualityData | null> (null);
@@ -41,15 +45,20 @@ const CityPage = () => {
         }
         setHasFetched(true);
         }
-    getData();
+        getData();
     }, [cityLat, cityLong]);
 
     if (!hasFetched) {
         return (
             <div>
-                <h1> 🌎 Air Quality Tracker </h1>
-                <h2>{cityName}</h2>
-                <p>Searching for PM2.5 data…</p>
+                <div style={{display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '20px'}}>
+                    <div style={{ flex: '0 0 auto' }}><button type="button" onClick={returnToHome} style={{padding: '10px 20px'}}> ← Back to Search </button> </div> 
+                    <div style={{ flex: '1 1 auto', textAlign: 'center' }}><h1 style={{fontSize:'40px', color:'white'}}> 🌎 Air Quality Tracker </h1></div>
+                </div>     
+                <div>
+                    <h2>{cityName}</h2>
+                    <p>Searching for PM2.5 data… </p>
+                </div>
             </div>
         );
     }
@@ -57,27 +66,30 @@ const CityPage = () => {
     if (airQuality == null || airQuality.pm25 == null) {
         return(
             <div>
-                <h1> 🌎 Air Quality Tracker </h1>
-                <h2> {cityName} </h2>
-                <h3> No PM2.5 data </h3>
+                <div style={{display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '20px'}}>
+                    <div style={{ flex: '0 0 auto' }}><button type="button" onClick={returnToHome} style={{padding: '10px 20px'}}> ← Back to Search </button> </div> 
+                    <div style={{ flex: '1 1 auto', textAlign: 'center' }}><h1 style={{margin:'0', fontSize:'40px', color:'white'}}> 🌎 Air Quality Tracker </h1></div>
+                </div>       
+                <div>
+                    <h2> {cityName} </h2>
+                    <h3> No PM2.5 data </h3>
+                </div>
             </div>
         )
     }
 
-    const aq: AirQualityData = airQuality;
+    const aq = airQuality;
 
     return (
-        <CityCard data={aq} cityName={cityName}></CityCard>
-        // <div>
-        //     <h1> 🌎 Air Quality Tracker </h1>
-        //     <h2> {cityName} </h2>
-        //     <p> {airQuality.pm25} ug/m^3</p>
-        //     <p> PM2.5 </p>
-        //     <p> Monitor Location </p>
-        //     <p> {airQuality.locationName} </p>
-        //     <p> Last Updated </p>
-        //     <p> {airQuality.lastUpdated} </p>
-        // </div>
+        <div>
+            <div style={{display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '20px'}}>
+                <div style={{ flex: '0 0 auto' }}><button type="button" onClick={returnToHome} style={{padding: '10px 20px'}}> ← Back to Search </button> </div> 
+                <div style={{ flex: '1 1 auto', textAlign: 'center' }}><h1 style={{fontSize:'40px', color:'white', margin: '0'}}> 🌎 Air Quality Tracker </h1></div>
+            </div>     
+            <div>
+                <CityCard data={aq} cityName={cityName}></CityCard>
+            </div>
+        </div>
     );
 };
 

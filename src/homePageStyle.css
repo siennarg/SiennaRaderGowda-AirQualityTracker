@@ -1,0 +1,35 @@
+body {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  padding: 40px;
+  font-family: Sans-Serif;
+  text-align: center;
+}
+
+.input {
+    border-radius: 15px;
+    padding: 10px;
+}
+
+.subtitle {
+  font-family: Verdana, sans-serif;
+  font-size: 13px;
+  color: white;
+}
+
+.dropdown {
+  width: 400px;
+  margin: 0 auto;
+}
+
+.dropdown_inner {
+  top: 110%;
+  left: 0;
+  width: 100%;
+}
+
+.big_container {
+  width: 700px;
+  margin: 0 auto;
+  position: relative;
+}

@@ -4,14 +4,16 @@ const API_KEY = "03eb00e771b25f02858f76479cff4c98e0fc1054de7b15ca8ea20a2916ea25c
 const BASE_URL = "/api";
 import { searchCities } from './geocoding'; 
 
+//create the bounding box for a certain radius
 export const createBoundingBox = (latitude: number, longitude: number, radius: number) => {
+    // convert to degrees for lat and longitutde
     const latDegrees = radius / 111;
     const lngDegrees = radius / (111 * Math.cos(latitude * Math.PI / 180));
     const minLng = longitude - lngDegrees;
     const maxLng =  longitude + lngDegrees;
     const minLat = latitude - latDegrees;
     const maxLat = latitude + latDegrees;
-
+ 
     return {
         minLng,
         maxLng,
@@ -30,7 +32,7 @@ export const fetchAirQualityByCoordinates = async(latitutde: number, longitude: 
         const proxiedUrl = `https://corsproxy.io/?${encodeURIComponent(apiUrl)}`;
         const response = await fetch(proxiedUrl, {method: 'GET', headers : {'X-API-Key': "03eb00e771b25f02858f76479cff4c98e0fc1054de7b15ca8ea20a2916ea25c0", 'Accept': 'application/json'}})
         
-        const responseData : LocationSearchResponse = await response.json();
+        const responseData: LocationSearchResponse = await response.json();
         if (responseData.results == null || responseData.results.length == 0){
             return null;
         }
@@ -50,17 +52,17 @@ export const fetchAirQualityByCoordinates = async(latitutde: number, longitude: 
         }, null);
 
         if (nearest == null) {
-            return null;
+            return nearest;
         }
 
         // Find PM2.5 sensor
         const finalStation = nearest.station;
-        const pm25Sensor = finalStation.sensors.find((sensor: LocationSearchResponse['results'][0]['sensors'][0]) => sensor.parameter.name == 'pm25');
-        if (pm25Sensor == null) {
+        const specificSensor = finalStation.sensors.find((sensor: LocationSearchResponse['results'][0]['sensors'][0]) => sensor.parameter.name == 'pm25');
+        if (specificSensor == null) {
             return null;
         }
 
-        const measurementUrl = `https://api.openaq.org/v3/sensors/${pm25Sensor.id}`;
+        const measurementUrl = `https://api.openaq.org/v3/sensors/${specificSensor.id}`;
         const proxiedMeasurementUrl = `https://corsproxy.io/?${encodeURIComponent(measurementUrl)}`;
 
         // Step 3: Get latest measurements
@@ -79,7 +81,7 @@ export const fetchAirQualityByCoordinates = async(latitutde: number, longitude: 
         return {
             locationName: finalStation.name,
             pm25: sensorData.latest.value,
-            unit: pm25Sensor.parameter.units,
+            unit: specificSensor.parameter.units,
             lastUpdated: sensorData.latest.datetime.local
         }
         
@@ -87,8 +89,6 @@ export const fetchAirQualityByCoordinates = async(latitutde: number, longitude: 
         // if there are any errors return null
         return null;
     }
-    
 };
-
 
 export const fetchAirQuality = fetchAirQualityByCoordinates;

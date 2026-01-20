@@ -1,5 +1,6 @@
 import React from "react";
 import { AirQualityData } from "../types";
+import './CityCardStyle.css'
 
 interface CityCardProps {
     data: AirQualityData;
@@ -8,10 +9,9 @@ interface CityCardProps {
 
 const getAirQualityStatus = (pm25: number) => {
   if (pm25 <= 12) return { status: 'Good', color: '#28a745' };
-  if (pm25 <= 35.4) return { status: 'Moderate', color: '#ffc107' };
-  if (pm25 <= 150.4) return { status: 'Unhealthy', color: '#dc3545' };
-  if (pm25 <= 250.4) return { status: 'Very Unhealthy', color: '#8b2e9f' };
-  return { status: 'Hazardous', color: '#7e0023' };
+  if (pm25 <= 35) return { status: 'Moderate', color: '#ffc107' };
+  if (pm25 <= 55) return { status: 'Unhealthy', color: '#dc3545' };
+  return { status: 'Very Unhealthy', color: '#8b2e9f' };
 };
 
 const CityCard: React.FC<CityCardProps> = ({ data, cityName }) => {
@@ -24,16 +24,49 @@ const CityCard: React.FC<CityCardProps> = ({ data, cityName }) => {
     return (
         <div style={{ 
             backgroundColor: '#ffff',
+            maxWidth: '400px',
+            margin: '0 auto',
+            borderRadius: '15px',
+            color: 'black',
+            padding: '35px'
+        }}> 
+        <div style= {{
+            display: 'flex',
+            justifyContent: 'space-between',
+            alignItems: 'center',
+            marginBottom: '16px'
         }}>
-        <h2> {cityName} </h2>
-        <div style={{
-            fontSize: '48px', 
-            fontWeight: 'bold', 
-            color: color,
-            margin: '16px 0'
-        }}>         {data.pm25.toFixed(1)} {data.unit}  </div>
-        <p>{status}</p>
+        <span style={{ color: '#333333', fontWeight: 'bold', fontSize: '22px' }}>
+            {cityName}   
+        </span>
+        <span style={{ color: color, fontWeight: '600', fontSize: '20px' }}>
+            {status}   
+        </span>
+        </div>
 
+        <div style= {{
+            display: 'flex',
+            alignItems: 'center',
+            marginBottom: '16px',
+            justifyContent: 'center'
+        }}>
+        <span style={{ color:'linear-gradient(135deg, #667eea 0%, #764ba2 100%)', fontWeight: 'bold', fontSize: '55px', marginRight:'8px'}}>
+            {data.pm25.toFixed(1)}   
+        </span>
+        <span style={{ color: '#666666', fontWeight: '400', fontSize: '20px'}}>
+            {data.unit}   
+        </span>
+        </div>
+
+        <div style={{ color: '#666666', fontSize: '15px'}}>PM2.5</div>
+        <div style= {{
+            textAlign: 'left',
+        }}>
+        <h4 className="label">Monitor Location</h4>
+        <div className="locationData">{data.locationName}</div>
+        <h4 className="label">Last Updated</h4>
+        <div className="locationData">{data.lastUpdated}</div>
+        </div>
         </div>
     )
 };
